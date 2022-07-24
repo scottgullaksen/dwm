@@ -14,6 +14,7 @@ static const char col_black[]       = "#000000";  // unselected, border
 static const char col_gray3[]       = "#bbbbbb";  // unselected, text
 static const char col_gray4[]       = "#eeeeee";  // selected, text
 static const char col_white[]       = "#ffffff";  // selected, text
+static const int user_bh            = 15;        /* 2 is the default spacing around the bar's font */
 static const char col_cyan[]        = "#005577";
 static const char col_bright_purp[]        = "#7700ff";  // selected, background and border
 static const char col_blue[]        = "#269aff";  // selected, background and border

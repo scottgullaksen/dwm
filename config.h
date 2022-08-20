@@ -1,7 +1,7 @@
 /* See LICENSE file for copyright and license details. */
 
 /* appearance */
-static const unsigned int borderpx  = 2;        /* border pixel of windows */
+static const unsigned int borderpx  = 3;        /* border pixel of windows */
 static const Gap default_gap        = {.isgap = 1, .realgap = 5, .gappx = 5};
 static const unsigned int snap      = 32;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
@@ -18,7 +18,7 @@ static const int user_bh            = 15;        /* 2 is the default spacing aro
 static const char col_cyan[]        = "#005577";
 static const char col_bright_purp[]        = "#7700ff";  // selected, background and border
 static const char col_blue[]        = "#269aff";  // selected, background and border
-static const unsigned int baralpha = 0xd0;
+static const unsigned int baralpha = 179;  // Ranges from 0 to 255
 static const unsigned int borderalpha = OPAQUE;
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
@@ -118,7 +118,7 @@ static Key keys[] = {
 	TAGKEYS(                        XK_9,                      8)
 	{ MODKEY|ShiftMask,             XK_r,      quit,           {0} },
 	{ MODKEY|ShiftMask,             XK_BackSpace,      spawn,           {.v = lockcmd } },
-	{ MODKEY|ShiftMask,             XK_q,      spawn,           {.v = killcmd } },
+	{ MODKEY|ShiftMask,             XK_q,      spawn,           {.v = killcmd } }
 };
 
 /* button definitions */

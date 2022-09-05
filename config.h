@@ -4,7 +4,7 @@
 static const unsigned int borderpx  = 3;        /* border pixel of windows */
 static const Gap default_gap        = {.isgap = 1, .realgap = 5, .gappx = 5};
 static const unsigned int snap      = 32;       /* snap pixel */
-static const int showbar            = 1;        /* 0 means no bar */
+static const int showbar            = 0;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const char *fonts[]          = { "Ubuntu Nerd Font:style=Medium,Bold:size=13" };
 static const char dmenufont[]       = "Ubuntu Nerd Font:style=Medium,Bold:size=13";

@@ -1,34 +1,35 @@
 /* See LICENSE file for copyright and license details. */
 
 /* appearance */
-static const unsigned int borderpx  = 0;        /* border pixel of windows */
+static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const Gap default_gap        = {.isgap = 1, .realgap = 5, .gappx = 5};
 static const unsigned int snap      = 32;       /* snap pixel */
 static const int showbar            = 0;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const char *fonts[]          = { "Ubuntu Nerd Font:style=Medium,Bold:size=13" };
-static const char dmenufont[]       = "Ubuntu Nerd Font:style=Medium,Bold:size=13";
+static const char *fonts[]          = { "Ubuntu Nerd Font:style=Medium,Bold:size=11" };
+static const char dmenufont[]       = "Ubuntu Nerd Font:style=Medium,Bold:size=11";
 static const char col_gray1[]       = "#222222";  // unselected, background
 static const char col_gray2[]       = "#444444";  // unselected, border
 static const char col_black[]       = "#000000";  // unselected, border
 static const char col_gray3[]       = "#bbbbbb";  // unselected, text
 static const char col_gray4[]       = "#eeeeee";  // selected, text
 static const char col_white[]       = "#ffffff";  // selected, text
-static const int user_bh            = 15;        /* 2 is the default spacing around the bar's font */
+static const int user_bh            = 2;        /* 2 is the default spacing around the bar's font */
 static const char col_cyan[]        = "#005577";
 static const char col_bright_purp[]        = "#7700ff";  // selected, background and border
-static const char col_blue[]        = "#269aff";  // selected, background and border
+static const char col_blue[]        = "#269aff";  // selected, background and borders
+static const char col_gh_dark[]     = "#0D1117";
 static const unsigned int baralpha = 179;  // Ranges from 0 to 255
 static const unsigned int borderalpha = OPAQUE;
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
-	[SchemeNorm] = { col_gray3, col_black, col_black },
-	[SchemeSel]  = { col_blue, col_black, col_blue },  // bg here determines both statusbar "selected" colors - how to seperate active tag color
+	[SchemeNorm] = { col_gray3, col_gh_dark, col_black },
+	[SchemeSel]  = { col_blue, col_gh_dark, col_blue },  // bg here determines both statusbar "selected" colors - how to seperate active tag color
 };
 static const unsigned int alphas[][3]      = {
 	/*               fg      bg        border     */
-	[SchemeNorm] = { OPAQUE, baralpha, borderalpha },
-	[SchemeSel]  = { OPAQUE, baralpha, borderalpha },
+	[SchemeNorm] = { OPAQUE, OPAQUE, borderalpha },
+	[SchemeSel]  = { OPAQUE, OPAQUE, borderalpha },
 };
 
 /* tagging */

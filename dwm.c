@@ -102,9 +102,14 @@ struct Client {
 typedef struct {
 	unsigned int mod;
 	KeySym keysym;
-	void (*func)(const Arg *);
-	const Arg arg;
 } Key;
+
+typedef struct {
+	unsigned int n;
+	const Key keys[5];
+ 	void (*func)(const Arg *);
+ 	const Arg arg;
+} Keychord;
 
 typedef struct {
 	const char *symbol;
@@ -277,6 +282,7 @@ static Display *dpy;
 static Drw *drw;
 static Monitor *mons, *selmon;
 static Window root, wmcheckwin;
+unsigned int currentkey = 0;
 
 /* configuration, allows nested code to access above variables */
 #include "config.h"
@@ -1077,12 +1083,12 @@ grabkeys(void)
 		if (!syms)
 			return;
 		for (k = start; k <= end; k++)
-			for (i = 0; i < LENGTH(keys); i++)
+			for (i = 0; i < LENGTH(keychords); i++)
 				/* skip modifier codes, we do that ourselves */
-				if (keys[i].keysym == syms[(k - start) * skip])
+				if (keychords[i].keys[currentkey].keysym == syms[(k - start) * skip])
 					for (j = 0; j < LENGTH(modifiers); j++)
 						XGrabKey(dpy, k,
-							 keys[i].mod | modifiers[j],
+							 keychords[i].keys[currentkey].mod | modifiers[j],
 							 root, True,
 							 GrabModeAsync, GrabModeAsync);
 		XFree(syms);
@@ -1111,17 +1117,49 @@ isuniquegeom(XineramaScreenInfo *unique, size_t n, XineramaScreenInfo *info)
 void
 keypress(XEvent *e)
 {
-	unsigned int i;
+  XEvent event = *e;
+	Keychord *keychord;
+	unsigned int ran = 0;
 	KeySym keysym;
 	XKeyEvent *ev;
 
-	ev = &e->xkey;
-	keysym = XKeycodeToKeysym(dpy, (KeyCode)ev->keycode, 0);
-	for (i = 0; i < LENGTH(keys); i++)
-		if (keysym == keys[i].keysym
-		&& CLEANMASK(keys[i].mod) == CLEANMASK(ev->state)
-		&& keys[i].func)
-			keys[i].func(&(keys[i].arg));
+	Keychord *newoptions;
+	Keychord *oldoptions = (Keychord *)malloc(sizeof(keychords));
+
+	memcpy(oldoptions, keychords, sizeof(keychords));
+	size_t numoption = 0;
+	while(!ran){
+		ev = &event.xkey;
+		keysym = XKeycodeToKeysym(dpy, (KeyCode)ev->keycode, 0);
+		newoptions = (Keychord *)malloc(0);
+		numoption = 0;
+		for (keychord = oldoptions; keychord->n != 0 && currentkey < 5; keychord = (Keychord *)((char *)keychord + sizeof(Keychord))){
+			if(keysym == keychord->keys[currentkey].keysym
+			   && CLEANMASK(keychord->keys[currentkey].mod) == CLEANMASK(ev->state)
+			   && keychord->func){
+				if(keychord->n == currentkey +1){
+					keychord->func(&(keychord->arg));
+					ran = 1;
+				}else{
+					numoption++;
+					newoptions = (Keychord *)realloc(newoptions, numoption * sizeof(Keychord));
+					memcpy((char *)newoptions + (numoption -1) * sizeof(Keychord),keychord, sizeof(Keychord));
+				}
+			}
+		}
+		currentkey++;
+		if(numoption == 0)
+			break;
+		grabkeys();
+		while (running && !XNextEvent(dpy, &event) && !ran)
+			if(event.type == KeyPress)
+				break;
+		free(oldoptions);
+		oldoptions = newoptions;
+	}
+	free(newoptions);
+	currentkey = 0;
+	grabkeys();
 }
 
 void
